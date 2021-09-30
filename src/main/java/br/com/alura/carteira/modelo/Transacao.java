@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import org.springframework.beans.factory.annotation.Value;
 
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -12,21 +13,23 @@ import java.time.LocalDate;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
+@Entity
+@Table(name="transacoes")
 public class Transacao {
 
-    @JsonProperty("ticker")
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String ticker;
-
-    @JsonProperty("preco")
     private BigDecimal preco;
-
-    @JsonProperty("quantidade")
-    private int quantidade;
-
-    @JsonProperty("data")
+    private Integer quantidade;
     private LocalDate data;
 
-    @JsonProperty("tipo")
+    @Enumerated(EnumType.STRING)
     private TipoTransacao tipo;
+
+    @ManyToOne
+    @JoinColumn(name = "id_usuario")
+    private Usuario usuario;
 
 }
