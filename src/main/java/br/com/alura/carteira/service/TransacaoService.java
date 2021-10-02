@@ -6,7 +6,10 @@ import br.com.alura.carteira.modelo.Transacao;
 import br.com.alura.carteira.repository.TransacaoRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,17 +22,17 @@ public class TransacaoService {
     private TransacaoRepository transacaoRepository;
     private ModelMapper modelMapper = new ModelMapper();
 
-    public List<TransacaoOutDTO> listar(){
-        List<Transacao> transacoes = transacaoRepository.findAll();
-        return transacoes
-                .stream()
-                .map(t -> modelMapper.map(t , TransacaoOutDTO.class))
-                .collect(Collectors.toList());
+    public Page<TransacaoOutDTO> listar(Pageable paginacao){
+        Page<Transacao> transacoes = transacaoRepository.findAll(paginacao);
+        return transacoes.map(t -> modelMapper.map(t , TransacaoOutDTO.class));
     }
 
+  @Transactional
   public void cadastrar(TransacaoInDTO dto){
 
       Transacao transacao = modelMapper.map(dto, Transacao.class);
+
+      transacao.setId(null);
 
       transacaoRepository.save(transacao);
   }

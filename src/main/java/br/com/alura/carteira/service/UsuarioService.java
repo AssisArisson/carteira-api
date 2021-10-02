@@ -6,6 +6,8 @@ import br.com.alura.carteira.modelo.Usuario;
 import br.com.alura.carteira.repository.UsuarioRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -20,12 +22,10 @@ public class UsuarioService {
     private UsuarioRepository usuarioRepository;
     private ModelMapper modelMapper = new ModelMapper();
 
-    public List<UsuarioOutDTO> listar() {
-        List<Usuario> usuarios = usuarioRepository.findAll();
+    public Page<UsuarioOutDTO> listar(Pageable paginacao) {
+        Page<Usuario> usuarios = usuarioRepository.findAll(paginacao);
         return usuarios
-                .stream()
-                .map(t -> modelMapper.map(t , UsuarioOutDTO.class))
-                .collect(Collectors.toList());
+                .map(t -> modelMapper.map(t , UsuarioOutDTO.class));
     }
 
     public void cadastrar(UsuarioInDTO dto) {

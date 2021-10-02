@@ -10,6 +10,9 @@ import br.com.alura.carteira.modelo.Usuario;
 import br.com.alura.carteira.service.UsuarioService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -25,9 +28,9 @@ public class UsuarioController {
     private UsuarioService usuarioService;
 
     @GetMapping
-    public List<UsuarioOutDTO> listar() {
+    public Page<UsuarioOutDTO> listar(@PageableDefault(size = 10) Pageable paginacao) {
 
-        return usuarioService.listar();
+        return usuarioService.listar(paginacao);
 
     }
 
