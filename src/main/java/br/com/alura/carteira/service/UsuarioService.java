@@ -3,7 +3,9 @@ package br.com.alura.carteira.service;
 import br.com.alura.carteira.dto.UsuarioInDTO;
 import br.com.alura.carteira.dto.UsuarioOutDTO;
 import br.com.alura.carteira.modelo.Usuario;
+import br.com.alura.carteira.repository.UsuarioRepository;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -14,10 +16,12 @@ import java.util.stream.Collectors;
 @Service
 public class UsuarioService {
 
-    private List<Usuario> usuarios = new ArrayList<>();
+    @Autowired
+    private UsuarioRepository usuarioRepository;
     private ModelMapper modelMapper = new ModelMapper();
 
     public List<UsuarioOutDTO> listar() {
+        List<Usuario> usuarios = usuarioRepository.findAll();
         return usuarios
                 .stream()
                 .map(t -> modelMapper.map(t , UsuarioOutDTO.class))
@@ -31,6 +35,6 @@ public class UsuarioService {
         String senha = new Random().nextInt(999999) + "";
         usuario.setSenha(senha);
 
-        usuarios.add(usuario);
+        usuarioRepository.save(usuario);
     }
 }

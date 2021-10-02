@@ -37,4 +37,7 @@ public class TransacaoInDTO {
     @JsonProperty("data")
     private LocalDate data;
 
+    @JsonProperty("usuario_id")
+    private Long usuarioId;
+
 }
