@@ -9,10 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.ClassUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,9 +35,15 @@ public class TransacaoController {
 
 
     @PostMapping
-    public void cadastrar(@RequestBody @Valid TransacaoInDTO dto){
+    public ResponseEntity<TransacaoOutDTO> cadastrar(@RequestBody @Valid TransacaoInDTO dto,
+              UriComponentsBuilder uriBuilder){
 
-        transacaoService.cadastrar(dto);
+        TransacaoOutDTO transacaoDTO = transacaoService.cadastrar(dto);
+
+        URI uri = uriBuilder.path("/transacoes/{id}")
+                .buildAndExpand(transacaoDTO.getId())
+                .toUri();
+        return ResponseEntity.created(uri).body(transacaoDTO);
 
     }
 

@@ -10,6 +10,9 @@ import java.math.BigDecimal;
 @Setter
 public class TransacaoOutDTO {
 
+    @JsonProperty("id")
+    private Long id;
+
     @JsonProperty("ticker")
     private String ticker;
 
@@ -17,7 +20,7 @@ public class TransacaoOutDTO {
     private BigDecimal preco;
 
     @JsonProperty("quantidade")
-    private int quantidade;
+    private Integer quantidade;
 
     @JsonProperty("tipo")
     private TipoTransacao tipo;

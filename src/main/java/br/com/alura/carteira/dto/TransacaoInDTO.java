@@ -17,6 +17,7 @@ public class TransacaoInDTO {
     @NotNull
     @NotEmpty
     @Size(min=5, max=6)
+    @Pattern(regexp = "[a-zA-Z]{4}[0-9][0-9]?")
     @JsonProperty("ticker")
     private String ticker;
 

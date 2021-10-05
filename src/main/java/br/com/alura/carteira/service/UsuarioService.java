@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +29,8 @@ public class UsuarioService {
                 .map(t -> modelMapper.map(t , UsuarioOutDTO.class));
     }
 
-    public void cadastrar(UsuarioInDTO dto) {
+    @Transactional
+    public UsuarioOutDTO cadastrar(UsuarioInDTO dto) {
 
         Usuario usuario = modelMapper.map(dto, Usuario.class);
 
@@ -36,5 +38,7 @@ public class UsuarioService {
         usuario.setSenha(senha);
 
         usuarioRepository.save(usuario);
+
+        return modelMapper.map(usuario, UsuarioOutDTO.class);
     }
 }

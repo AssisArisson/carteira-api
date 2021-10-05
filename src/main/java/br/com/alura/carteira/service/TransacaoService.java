@@ -28,12 +28,14 @@ public class TransacaoService {
     }
 
   @Transactional
-  public void cadastrar(TransacaoInDTO dto){
+  public TransacaoOutDTO cadastrar(TransacaoInDTO dto){
 
       Transacao transacao = modelMapper.map(dto, Transacao.class);
 
       transacao.setId(null);
 
       transacaoRepository.save(transacao);
+
+      return modelMapper.map(transacao, TransacaoOutDTO.class);
   }
 }

@@ -29,7 +29,7 @@ public class Transacao {
     private TipoTransacao tipo;
 
     @ManyToOne
-    @JoinColumn(name = "id_usuario")
+    @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
 }
