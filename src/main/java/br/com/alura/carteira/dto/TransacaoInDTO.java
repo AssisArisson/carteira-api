@@ -14,10 +14,9 @@ import java.time.LocalDate;
 @Setter
 public class TransacaoInDTO {
 
-    @NotNull
-    @NotEmpty
+    @NotBlank
     @Size(min=5, max=6)
-    @Pattern(regexp = "[a-zA-Z]{4}[0-9][0-9]?")
+    @Pattern(regexp = "[a-zA-Z]{4}[0-9][0-9]?", message = "{transacao.ticker.invalido}")
     @JsonProperty("ticker")
     private String ticker;
 
