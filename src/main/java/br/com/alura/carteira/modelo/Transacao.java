@@ -32,4 +32,12 @@ public class Transacao {
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
+    public Transacao(String ticker, BigDecimal preco, Integer quantidade, LocalDate data, TipoTransacao tipo, Usuario usuario) {
+        this.ticker = ticker;
+        this.preco = preco;
+        this.quantidade = quantidade;
+        this.data = data;
+        this.tipo = tipo;
+        this.usuario = usuario;
+    }
 }
