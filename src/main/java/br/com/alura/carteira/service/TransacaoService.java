@@ -1,5 +1,7 @@
 package br.com.alura.carteira.service;
 
+import br.com.alura.carteira.dto.AtualizarTransacaoInDTO;
+import br.com.alura.carteira.dto.DetalhesTransacaoOutDTO;
 import br.com.alura.carteira.dto.TransacaoInDTO;
 import br.com.alura.carteira.dto.TransacaoOutDTO;
 import br.com.alura.carteira.modelo.Transacao;
@@ -54,4 +56,25 @@ public class TransacaoService {
 
   }
 
+    @Transactional
+    public TransacaoOutDTO atualizar(AtualizarTransacaoInDTO dto) {
+        Transacao transacao = transacaoRepository.getById(dto.getId());
+
+        transacao.atualizarInformacoes(dto.getTicker(), dto.getData(), dto.getPreco(), dto.getQuantidade(), dto.getTipo());
+
+        return modelMapper.map(transacao, TransacaoOutDTO.class);
+    }
+
+    @Transactional
+    public void remover(Long id) {
+        transacaoRepository.deleteById(id);
+    }
+
+    public DetalhesTransacaoOutDTO detalahar(Long id) {
+        Transacao transacao = transacaoRepository
+                .findById(id)
+                .orElseThrow(() -> new EntityNotFoundException());
+
+        return modelMapper.map(transacao, DetalhesTransacaoOutDTO.class);
+    }
 }
