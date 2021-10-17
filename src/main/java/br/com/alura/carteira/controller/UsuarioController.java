@@ -8,6 +8,8 @@ import br.com.alura.carteira.dto.UsuarioOutDTO;
 import br.com.alura.carteira.modelo.Transacao;
 import br.com.alura.carteira.modelo.Usuario;
 import br.com.alura.carteira.service.UsuarioService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -25,12 +27,14 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/usuarios")
+@Api(tags = "Usuario")
 public class UsuarioController {
 
     @Autowired
     private UsuarioService usuarioService;
 
     @GetMapping
+    @ApiOperation("Listar usuarios")
     public Page<UsuarioOutDTO> listar(@PageableDefault(size = 10) Pageable paginacao) {
 
         return usuarioService.listar(paginacao);
@@ -38,6 +42,7 @@ public class UsuarioController {
     }
 
     @PostMapping
+    @ApiOperation("Cadastrar novo usuarios")
     public ResponseEntity<UsuarioOutDTO> cadastrar(@RequestBody @Valid UsuarioInDTO dto,
               UriComponentsBuilder uriBuilder){
 
