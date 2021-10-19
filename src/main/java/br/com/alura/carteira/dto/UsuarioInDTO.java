@@ -9,7 +9,7 @@ import javax.validation.constraints.NotBlank;
 @Setter
 public class UsuarioInDTO {
 
-    @NotBlank(message = "deve ser informado!")
+    @NotBlank
     private String nome;
 
     @NotBlank
