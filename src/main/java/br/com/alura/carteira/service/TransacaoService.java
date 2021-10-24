@@ -70,6 +70,7 @@ public class TransacaoService {
         transacaoRepository.deleteById(id);
     }
 
+    @Transactional
     public DetalhesTransacaoOutDTO detalahar(Long id) {
         Transacao transacao = transacaoRepository
                 .findById(id)
