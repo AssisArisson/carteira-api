@@ -23,7 +23,8 @@ class CalculadoraDeImpostoServiceTest {
                 quantidade,
                 LocalDate.now(),
                 tipo,
-                new Usuario(1l, "Rafaela", "rafa@gmail", "123456")
+                new Usuario(1l, "Rafaela", "rafa@gmail", "123456", null),
+                BigDecimal.ZERO
         );
         return transacao;
     }

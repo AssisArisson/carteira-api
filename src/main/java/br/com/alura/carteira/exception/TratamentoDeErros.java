@@ -4,6 +4,7 @@ import br.com.alura.carteira.dto.Erro400DTO;
 import br.com.alura.carteira.dto.Erro500DTO;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -41,6 +42,13 @@ public class TratamentoDeErros {
     @ExceptionHandler({EntityNotFoundException.class, EmptyResultDataAccessException.class})
     @ResponseStatus(code = HttpStatus.NOT_FOUND)
     public void tratarErro404() {
+
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    @ResponseStatus(code = HttpStatus.FORBIDDEN)
+    public String tratarErro403(AccessDeniedException e) {
+        return e.getMessage();
 
     }
 

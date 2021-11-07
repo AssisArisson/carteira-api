@@ -2,7 +2,12 @@ package br.com.alura.carteira.repository;
 
 
 import br.com.alura.carteira.dto.ItemCarteiraDTO;
+import br.com.alura.carteira.dto.TransacaoOutDTO;
 import br.com.alura.carteira.modelo.Transacao;
+import br.com.alura.carteira.modelo.Usuario;
+import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -19,4 +24,5 @@ public interface TransacaoRepository extends JpaRepository<Transacao, Long> {
     List<ItemCarteiraDTO> relatorioCarteiraDeInvestimentos();
 
 
+    Page<Transacao> findAllByUsuario(Pageable paginacao, Usuario usuario);
 }

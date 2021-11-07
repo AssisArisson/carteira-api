@@ -13,6 +13,7 @@ import java.time.LocalDate;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(of = "id")
 @Entity
 @Table(name="transacoes")
 public class Transacao {
@@ -32,6 +33,8 @@ public class Transacao {
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
+    private BigDecimal imposto;
+
     public Transacao(String ticker, BigDecimal preco, Integer quantidade, LocalDate data, TipoTransacao tipo, Usuario usuario) {
         this.ticker = ticker;
         this.preco = preco;
@@ -47,5 +50,9 @@ public class Transacao {
         this.preco = preco;
         this.quantidade = quantidade;
         this.tipo = tipo;
+    }
+
+    public boolean pertenceAoUsuario(Usuario usuario) {
+        return this.usuario.equals(usuario);
     }
 }

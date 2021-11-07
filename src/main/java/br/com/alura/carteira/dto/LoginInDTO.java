@@ -4,19 +4,14 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
-public class UsuarioInDTO {
-
-    @NotBlank
-    private String nome;
+public class LoginInDTO {
 
     @NotBlank
     private String login;
-
-    @NotNull
-    private Long perfilId;
+    @NotBlank
+    private  String senha;
 
 }

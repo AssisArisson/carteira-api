@@ -3,14 +3,18 @@ package br.com.alura.carteira.service;
 import br.com.alura.carteira.dto.TransacaoInDTO;
 import br.com.alura.carteira.dto.TransacaoOutDTO;
 import br.com.alura.carteira.modelo.TipoTransacao;
+import br.com.alura.carteira.modelo.Transacao;
+import br.com.alura.carteira.modelo.Usuario;
 import br.com.alura.carteira.repository.TransacaoRepository;
 import br.com.alura.carteira.repository.UsuarioRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.modelmapper.ModelMapper;
 
 import javax.persistence.EntityNotFoundException;
 import java.math.BigDecimal;
@@ -31,6 +35,19 @@ class TransacaoServiceTest {
     @InjectMocks
     private TransacaoService service;
 
+    @Mock
+    private ModelMapper modelMapper;
+
+    @Mock
+    private CalculadoraDeImpostoService calculadoraDeImpostoService;
+
+    private Usuario logado;
+
+    @BeforeEach
+    public void before(){
+        this.logado = new Usuario("fulano", "fulano@gmail.com", "123456");
+    }
+
     private TransacaoInDTO criarTransacaoInDto(){
         TransacaoInDTO tranDTO = new TransacaoInDTO(
                 "ITSA4",
@@ -47,7 +64,31 @@ class TransacaoServiceTest {
     void deveriaCadastrarUmaTransacao(){
         TransacaoInDTO tranDTO = criarTransacaoInDto();
 
-        TransacaoOutDTO dto = service.cadastrar(tranDTO);
+        Mockito.when(usuarioRepository
+                .getById(tranDTO.getUsuarioId()))
+                .thenReturn(logado);
+
+        Transacao transacao = new Transacao(tranDTO.getTicker(),
+                tranDTO.getPreco(),
+                tranDTO.getQuantidade(),
+                tranDTO.getData(),
+                tranDTO.getTipo(),
+                logado);
+
+        Mockito.when(modelMapper.map(tranDTO, Transacao.class))
+                .thenReturn(transacao);
+
+        Mockito.when(modelMapper.map(transacao, TransacaoOutDTO.class))
+                .thenReturn(new TransacaoOutDTO(
+                        null,
+                        transacao.getTicker(),
+                        transacao.getPreco(),
+                        transacao.getQuantidade(),
+                        transacao.getTipo(),
+                        BigDecimal.ZERO
+                ));
+
+        TransacaoOutDTO dto = service.cadastrar(tranDTO, logado);
 
         Mockito.verify(transacaoRepository).save(Mockito.any());
 
@@ -66,7 +107,7 @@ class TransacaoServiceTest {
                 .when(usuarioRepository.getById(tranDTO.getUsuarioId()))
                 .thenThrow(EntityNotFoundException.class);
 
-        assertThrows(IllegalArgumentException.class ,() -> service.cadastrar(tranDTO));
+        assertThrows(IllegalArgumentException.class ,() -> service.cadastrar(tranDTO, logado));
 
     }
 }
