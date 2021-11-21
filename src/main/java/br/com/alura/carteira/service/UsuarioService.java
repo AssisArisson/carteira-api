@@ -2,6 +2,8 @@ package br.com.alura.carteira.service;
 
 import br.com.alura.carteira.dto.UsuarioInDTO;
 import br.com.alura.carteira.dto.UsuarioOutDTO;
+import br.com.alura.carteira.infra.EnviadorDeEmail;
+import br.com.alura.carteira.infra.EnviadorDeEmailReal;
 import br.com.alura.carteira.modelo.Perfil;
 import br.com.alura.carteira.modelo.Usuario;
 import br.com.alura.carteira.repository.PerfilRepository;
@@ -14,10 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 @Service
 public class UsuarioService {
@@ -33,6 +32,9 @@ public class UsuarioService {
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    @Autowired
+    private EnviadorDeEmail enviadorDeEmail;
 
     public Page<UsuarioOutDTO> listar(Pageable paginacao) {
         Page<Usuario> usuarios = usuarioRepository.findAll(paginacao);
@@ -52,6 +54,14 @@ public class UsuarioService {
         usuario.setSenha(bCryptPasswordEncoder.encode(senha));
 
         usuarioRepository.save(usuario);
+
+        String destinatario = usuario.getEmail();
+        String assunto = "Carteira - Bem vindo(a)";
+        String mensagem = String.format("Ola %s!\n\n" +
+                "Segue seus dados de acesso ao sistema Carteira:" +
+                "\nLogin:%s\nSenha:%s", usuario.getNome(), usuario.getLogin(), senha);
+
+        enviadorDeEmail.enviarEmail(destinatario, assunto, mensagem);
 
         return modelMapper.map(usuario, UsuarioOutDTO.class);
     }
